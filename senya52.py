@@ -1,5 +1,5 @@
+import random
 from tkinter import *
-from tkinter import ttk
 from tkinter import messagebox, ttk
 from quiz_data import quiz_data
 import tkinter as tk
@@ -27,11 +27,14 @@ def show_new_content3():
     def show_question_by_theme():
         # Получите текущий вопрос из списка quiz_data
         global questions_by_theme
+        if current_question_by_theme == 0:
+            random.shuffle(questions_by_theme)
         question_by_theme = questions_by_theme[current_question_by_theme]
         qs_label.config(text=question_by_theme["question"])
 
         # Отображение выбора на кнопках
         choices = question_by_theme["choices"]
+        random.shuffle(choices)
         for i in range(4):
             choice_btns[i].config(text=choices[i], state="normal")  # Reset button state
 
@@ -275,12 +278,18 @@ def show_new_content1():
 def show_new_content2():
     def show_question():
         # Получите текущий вопрос из списка quiz_data
+        global list_of_questions
+        if len(list_of_questions) == 0:
 
-        question = quiz_data[current_question]
+            list_of_questions = quiz_data
+            random.shuffle(list_of_questions)
+
+        question = list_of_questions[current_question]
         qs_label.config(text=question["question"])
 
         # Отображение выбора на кнопках
         choices = question["choices"]
+        random.shuffle(choices)
         for i in range(4):
             choice_btns[i].config(text=choices[i], state="normal")  # Reset button state
 
@@ -291,7 +300,7 @@ def show_new_content2():
     # Функция проверки выбранного ответа и отзыва
     def check_answer(choice):
         # Получите текущий вопрос из списка quiz_data
-        question = quiz_data[current_question]
+        question = list_of_questions[current_question]
         selected_choice = choice_btns[choice].cget("text")
 
         # Проверьте, соответствует ли выбранный вариант правильному ответу
@@ -317,10 +326,10 @@ def show_new_content2():
 
     # Функция перехода к следующему вопросу
     def next_question():
-        global count_of_wrong_answers, current_question, questions_by_theme, score
+        global count_of_wrong_answers, current_question, questions_by_theme, score, list_of_questions
 
         current_question += 1
-        if current_question < len(quiz_data):
+        if current_question < len(list_of_questions):
             # Если есть еще вопросы, покажите следующий вопрос
             show_question()
         else:
@@ -345,6 +354,7 @@ def show_new_content2():
                                       "Особенности природы России": 0}
 
             questions_by_theme = []
+            list_of_questions = []
             # Инициализировать текущий указатель вопросов
             current_question = 0
             clear_and_show_old_content()
@@ -440,8 +450,9 @@ def show_new_content2():
     show_question()
 
 def clear_and_show_old_content():
-    global count_of_wrong_answers, current_question_by_theme, score, current_question, questions_by_theme
+    global count_of_wrong_answers, current_question_by_theme, score, current_question, questions_by_theme, list_of_questions
     score = 0
+    list_of_questions = []
     count_of_wrong_answers = {"Географические особенности природы материков и океанов, народов Земли": 0,
                               "Политико-административное положение России": 0,
                               "Особенности природы России": 0}
@@ -503,7 +514,7 @@ def clear_and_show_old_content():
     label2.place(x=2, y=60)
 
 main_root = Tk()
-# main_root.config(cursor='target')
+# main_root.config(cursor='man')
 main_root.title("Тест")
 main_root.geometry("700x600")
 main_root.resizable(width=False, height=False)
@@ -511,7 +522,7 @@ main_root.resizable(width=False, height=False)
 menu_canvas = Canvas(main_root,
                      width=700,
                      height=600)
-image = tk.PhotoImage(file="qwas3.png")
+image = tk.PhotoImage(file="azx.png")
 menu_canvas.create_image(0, 0, image=image, anchor="nw")
 
 btn1 = tk.Button(menu_canvas,
@@ -570,6 +581,7 @@ count_of_wrong_answers = {"Географические особенности �
                           "Особенности природы России": 0}
 
 questions_by_theme = []
+list_of_questions = []
 # Инициализировать текущий указатель вопросов
 current_question = 0
 current_question_by_theme = 0
