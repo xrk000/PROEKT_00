@@ -1,9 +1,17 @@
+import os
 import random
+import sys
 from tkinter import *
 from tkinter import messagebox, ttk
 from quiz_data import quiz_data
 import tkinter as tk
 
+def resources_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def clear_and_show_new_content1():
     clear_content1()
@@ -524,8 +532,11 @@ main_root.resizable(width=False, height=False)
 menu_canvas = Canvas(main_root,
                      width=700,
                      height=600)
-image = tk.PhotoImage(file="azx.png")
+path_bg = "azx.png"
+image = tk.PhotoImage(file=f"{resources_path(path_bg)}")
 menu_canvas.create_image(0, 0, image=image, anchor="nw")
+path_ico = "icon.ico"
+main_root.iconbitmap(f"{resources_path(path_ico)}")
 
 btn1 = tk.Button(menu_canvas,
                  text="Начать тест",
